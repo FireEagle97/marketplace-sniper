@@ -1,0 +1,99 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+coverage/
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Production
+build/
+dist/
+
+# Misc
+.DS_Store
+*.pem
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env files
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+logs
+*.log
+
+# Cache
+.cache/
+
+# API Routes
+app/api/whop/
+app/api/stripe/
+app/api/user/
+
+# Marketing Pages
+app/(marketing)/pricing/
+app/(marketing)/components/
+
+# Auth Pages
+app/(auth)/
+
+# Payment Pages
+app/pay/
+
+# Components
+components/cancellation-popup.tsx
+components/credit-usage-display.tsx
+components/header.tsx
+components/payment-success-popup.tsx
+components/upgrade-plan-popup.tsx
+components/welcome-message-popup.tsx
+
+# Library Files
+lib/stripe.ts
+lib/utils.ts
+lib/whop.ts 
+
+# Database
+db/schema/profiles-schema.ts
+db/schema/pending-profiles-schema.ts
+db/queries/profiles-queries.ts
+db/queries/pending-profiles-queries.ts
+
+#Actions
+actions/whop-actions.ts
+actions/stripe-actions.ts
+actions/pending-profiles-actions.ts
+actions/profiles-actions.ts
+actions/credit-actions.ts
+
+
+
+
