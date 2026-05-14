@@ -37,6 +37,11 @@ next-env.d.ts
 
 # claude code
 .claude/settings.local.json
+.agents/*
+
+# workers
+workers/node_modules
+workers/dist
 
 # windows
 Thumbs.db
