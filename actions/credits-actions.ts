@@ -163,7 +163,7 @@ export async function checkCredits(
   requiredCredits: number = 1
 ): Promise<{ hasCredits: boolean; profile: any | null; error?: string }> {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     if (!userId) {
       return { hasCredits: false, profile: null, error: "Not authenticated" };
@@ -278,7 +278,7 @@ export async function useCredits(
   description: string = "Used feature"
 ): Promise<{ success: boolean; profile?: any; error?: string }> {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     if (!userId) {
       return { success: false, error: "Not authenticated" };
@@ -333,7 +333,7 @@ export async function getCreditStatus(): Promise<{
   error?: string;
 }> {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     if (!userId) {
       return { 
@@ -397,7 +397,7 @@ export async function getCreditStatus(): Promise<{
  */
 export async function hasReachedCreditLimit(): Promise<boolean> {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     if (!userId) {
       return false; // Not authenticated users can't reach limits

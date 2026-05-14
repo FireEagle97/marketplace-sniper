@@ -6,8 +6,13 @@ import { NextResponse } from "next/server";
 import { handlePaymentSuccess, handlePaymentFailed } from "./utils/payment-handlers";
 import { handleMembershipChange } from "./utils/membership-handlers";
 
-// Create the webhook handler at the module level
-const handleWebhook = makeWebhookHandler();
+// Lazily initialize the webhook handler — WHOP_WEBHOOK_KEY may not be set when using Stripe
+let handleWebhook: ReturnType<typeof makeWebhookHandler> | null = null;
+try {
+  handleWebhook = makeWebhookHandler();
+} catch {
+  console.warn("Whop webhook handler not initialized: WHOP_WEBHOOK_KEY is not set. Whop webhooks will not be processed.");
+}
 
 /**
  * Main webhook handler function
@@ -52,6 +57,13 @@ export async function POST(req: Request) {
       });
     }
     
+    if (!handleWebhook) {
+      return new Response(JSON.stringify({ status: "error", message: "Whop webhook handler not configured" }), {
+        status: 503,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
     // Process the webhook with error handling for each handler function
     try {
       return handleWebhook(newReq, {

@@ -170,8 +170,8 @@ function PricingCard({
       // Construct the final URL
       finalButtonLink = `${baseUrl}?${params.toString()}`;
     } else {
-      // For Stripe, keep the original 'ref' parameter
-      finalButtonLink = `${buttonLink}${buttonLink.includes('?') ? '&' : '?'}ref=${userId}`;
+      // For Stripe, pass client_reference_id so the webhook can link payment to the user
+      finalButtonLink = `${buttonLink}${buttonLink.includes('?') ? '&' : '?'}client_reference_id=${userId}`;
     }
   }
   

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 const PricingPageClient = dynamic(() => import("./pricing-page-client"), { ssr: true });
 
 export default async function PricingPage() {
-  const { userId } = auth();
+  const { userId } = await auth();
   
   // Provider selection happens server-side through environment variables
   // This is never exposed to the client

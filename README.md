@@ -110,6 +110,7 @@ NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/signup
 
 # Payments (Stripe)
+# Payments (Stripe)
 STRIPE_SECRET_KEY="sk_live_..."
 STRIPE_WEBHOOK_SECRET="whsec_..."
 NEXT_PUBLIC_STRIPE_PORTAL_LINK="https://billing.stripe.com/p/session/..."

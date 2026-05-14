@@ -6,8 +6,10 @@ const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 // This handles both payment provider use cases from whop-setup.md and stripe-setup.md
 export default clerkMiddleware(async (auth, req) => {
   // Skip auth for webhook endpoints
-  if (req.nextUrl.pathname.startsWith('/api/whop/webhooks')) {
-    console.log("Skipping Clerk auth for Whop webhook endpoint");
+  if (
+    req.nextUrl.pathname.startsWith('/api/whop/webhooks') ||
+    req.nextUrl.pathname.startsWith('/api/stripe/webhooks')
+  ) {
     return NextResponse.next();
   }
   
@@ -46,7 +48,7 @@ export default clerkMiddleware(async (auth, req) => {
   // If a user has just completed signup after payment and is authenticated,
   // redirect them to the dashboard instead of keeping them on the signup page
   if (req.nextUrl.pathname.startsWith('/signup') && req.nextUrl.search.includes('payment=success')) {
-    const { userId } = auth();
+    const { userId } = await auth();
     
     // If user is authenticated and on signup page with payment=success, they should go to dashboard
     if (userId) {
@@ -58,7 +60,7 @@ export default clerkMiddleware(async (auth, req) => {
     }
   }
 
-  const { userId, redirectToSignIn } = auth();
+  const { userId, redirectToSignIn } = await auth();
 
   // Standard route protection logic
   if (!userId && isProtectedRoute(req)) {
@@ -76,7 +78,7 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
   matcher: [
     // Match all routes except for these:
-    "/((?!api/whop/webhooks|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api/whop/webhooks|api/stripe/webhooks|_next/static|_next/image|favicon.ico).*)",
     "/"
   ]
 };

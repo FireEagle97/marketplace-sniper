@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (userId) {
     try {
@@ -60,9 +60,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <ClerkProvider>
           <Providers
             attribute="class"
             defaultTheme="light"
@@ -74,8 +74,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </LayoutWrapper>
             <Toaster />
           </Providers>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

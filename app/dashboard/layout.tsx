@@ -63,7 +63,7 @@ async function checkExpiredSubscriptionCredits(profile: any | null): Promise<any
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   // Fetch user profile once at the layout level
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/login");
