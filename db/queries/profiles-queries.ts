@@ -297,6 +297,17 @@ export const getUserPlanInfo = async (userId: string) => {
   }
 };
 
+export const getProfileByStripeCustomerId = async (stripeCustomerId: string) => {
+  try {
+    const profiles = await db.select().from(profilesTable)
+      .where(eq(profilesTable.stripeCustomerId, stripeCustomerId));
+    return profiles[0] ?? null;
+  } catch (error) {
+    console.error("Error getting profile by Stripe customer ID:", error);
+    return null;
+  }
+};
+
 // Delete profile by ID (works with both regular and temporary IDs)
 export const deleteProfileById = async (profileId: string) => {
   try {
