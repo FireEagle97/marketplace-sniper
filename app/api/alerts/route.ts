@@ -7,8 +7,7 @@ import {
   createAlert,
 } from "@/db/queries/alerts";
 import { getScrapeQueue, buildScrapeJobData } from "@/lib/queue";
-
-const FREE_ALERT_LIMIT = 3;
+import { canCreateAlert } from "@/lib/freemium";
 
 const createAlertSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -43,16 +42,11 @@ export async function POST(req: Request) {
   }
 
   const user = await currentUser();
-  const isPaid = user?.publicMetadata?.plan === "paid";
+  const plan = (user?.publicMetadata?.plan as string) ?? "free";
+  const alertCount = await countAlertsByUser(userId);
 
-  if (!isPaid) {
-    const count = await countAlertsByUser(userId);
-    if (count >= FREE_ALERT_LIMIT) {
-      return NextResponse.json(
-        { error: "UPGRADE_REQUIRED" },
-        { status: 403 }
-      );
-    }
+  if (!canCreateAlert({ plan, alertCount })) {
+    return NextResponse.json({ error: "UPGRADE_REQUIRED" }, { status: 403 });
   }
 
   let body: unknown;
