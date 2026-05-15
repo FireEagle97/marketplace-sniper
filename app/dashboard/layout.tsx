@@ -86,6 +86,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   // Get the current user to extract email
   const user = await currentUser();
   const userEmail = user?.emailAddresses?.[0]?.emailAddress || "";
+  const plan = (user?.publicMetadata?.plan as string) ?? "free";
   
   // Log profile details for debugging
   console.log('Dashboard profile:', {
@@ -109,9 +110,10 @@ export default async function DashboardLayout({ children }: { children: ReactNod
       )}
       
       {/* Sidebar component with profile data and user email */}
-      <Sidebar 
-        profile={profile} 
-        userEmail={userEmail} 
+      <Sidebar
+        profile={profile}
+        userEmail={userEmail}
+        plan={plan}
         whopMonthlyPlanId={process.env.WHOP_PLAN_ID_MONTHLY || ''}
         whopYearlyPlanId={process.env.WHOP_PLAN_ID_YEARLY || ''}
       />

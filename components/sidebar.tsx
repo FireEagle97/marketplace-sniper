@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { Home, Settings, Database, Target, Users, Sparkles, CreditCard } from "lucide-react";
+import { Home, Settings, Database, Target, Users, Sparkles, CreditCard, Bell } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
@@ -19,11 +19,12 @@ import { useState, useEffect, useCallback } from "react";
 interface SidebarProps {
   profile: SelectProfile | null;
   userEmail?: string;
+  plan?: string;
   whopMonthlyPlanId: string;
   whopYearlyPlanId: string;
 }
 
-export default function Sidebar({ profile, userEmail, whopMonthlyPlanId, whopYearlyPlanId }: SidebarProps) {
+export default function Sidebar({ profile, userEmail, plan, whopMonthlyPlanId, whopYearlyPlanId }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [showUpgradePopup, setShowUpgradePopup] = useState(false);
@@ -41,11 +42,12 @@ export default function Sidebar({ profile, userEmail, whopMonthlyPlanId, whopYea
   // Plan IDs now come from props, not environment variables
   
   const navItems = [
-    { href: "/dashboard", icon: <Home size={16} />, label: "Home" },
-    { href: "/dashboard/settings", icon: <Settings size={16} />, label: "Settings" },
+    { href: "/dashboard",             icon: <Home size={16} />,     label: "Dashboard" },
+    { href: "/alerts",                icon: <Bell size={16} />,     label: "My Alerts" },
+    { href: "/dashboard/settings",    icon: <Settings size={16} />, label: "Settings" },
     { href: "/dashboard/data-source", icon: <Database size={16} />, label: "Data source" },
-    { href: "/dashboard/targets", icon: <Target size={16} />, label: "Targets" },
-    { href: "/dashboard/members", icon: <Users size={16} />, label: "Members" },
+    { href: "/dashboard/targets",     icon: <Target size={16} />,   label: "Targets" },
+    { href: "/dashboard/members",     icon: <Users size={16} />,    label: "Members" },
   ];
 
   // Handle navigation item click
@@ -159,27 +161,35 @@ export default function Sidebar({ profile, userEmail, whopMonthlyPlanId, whopYea
             {/* Subtle section divider */}
             <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-4" />
             
-            {/* Upgrade Button - Links to pricing page */}
-            <Link href="/pricing">
-              <motion.div
-                whileHover={{ 
-                  scale: 1.03,
-                  transition: { duration: 0.2 }
-                }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <Button 
-                  variant="default" 
-                  size="sm"
-                  className="w-full flex items-center justify-center md:justify-start gap-1.5 py-1.5 h-auto transition-colors shadow-sm mb-3 relative overflow-hidden group"
-                >
-                  {/* Button hover effect */}
-                  <span className="absolute inset-0 w-full h-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <Sparkles size={14} className="relative z-10" />
-                  <span className="hidden md:block text-xs font-medium relative z-10">Upgrade</span>
-                </Button>
-              </motion.div>
-            </Link>
+            {/* Plan badge / Upgrade CTA */}
+            {plan === "paid" ? (
+              <div className="flex items-center justify-center md:justify-start gap-2 px-3 py-1.5 mb-3">
+                <Sparkles size={14} className="text-primary" />
+                <span className="hidden md:block text-xs font-semibold text-primary">Pro</span>
+              </div>
+            ) : (
+              <>
+                <div className="hidden md:flex items-center gap-2 px-3 mb-1 text-xs text-gray-400">
+                  <span>Free Plan</span>
+                </div>
+                <Link href="/pricing">
+                  <motion.div
+                    whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="w-full flex items-center justify-center md:justify-start gap-1.5 py-1.5 h-auto transition-colors shadow-sm mb-3 relative overflow-hidden group"
+                    >
+                      <span className="absolute inset-0 w-full h-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <Sparkles size={14} className="relative z-10" />
+                      <span className="hidden md:block text-xs font-medium relative z-10">Upgrade</span>
+                    </Button>
+                  </motion.div>
+                </Link>
+              </>
+            )}
             
             {/* Billing Button - Only visible for members with whopMembershipId */}
             {profile?.whopMembershipId && (

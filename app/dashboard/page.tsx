@@ -1,16 +1,16 @@
-/**
- * Dashboard page for Template App
- * Displays the main dashboard interface for authenticated users
- * Features a sidebar navigation and content area
- * Requires a paid membership to access
- */
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { countAlertsByUser } from "@/db/queries/alerts";
 
-/**
- * Main dashboard page component
- * The profile is provided by the parent layout component
- */
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const { userId } = await auth();
+  if (userId) {
+    const count = await countAlertsByUser(userId);
+    if (count === 0) {
+      return redirect("/alerts/new");
+    }
+  }
   return (
     <main className="p-6 md:p-10">
       <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
