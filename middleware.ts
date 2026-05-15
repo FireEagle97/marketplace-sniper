@@ -1,7 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/alerts(.*)"]);
 
 // This handles both payment provider use cases from whop-setup.md and stripe-setup.md
 export default clerkMiddleware(async (auth, req) => {
